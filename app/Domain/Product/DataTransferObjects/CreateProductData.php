@@ -40,6 +40,9 @@ class CreateProductData
         return $this->expireDate;
     }
 
+    /**
+     * @param array $payload
+     */
     public function __construct(array $payload)
     {
         $this->name = $payload['name'];
@@ -47,6 +50,10 @@ class CreateProductData
         $this->expireDate = Carbon::make($payload['expire_date']);
     }
 
+    /**
+     * @param Request $request
+     * @return static
+     */
     public static function fromRequest(Request $request): self
     {
         return new self([
@@ -54,5 +61,16 @@ class CreateProductData
             'price' => $request->input('price'),
             'expire_date' => $request->input('expire_date')
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array {
+        return [
+            'name' => $this->getName(),
+            'price' => $this->getPrice(),
+            'expire_date' => $this->getExpireDate()->toDateTimeString()
+        ];
     }
 }
